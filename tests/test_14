@@ -1,0 +1,10 @@
+	let Is_perfect_Square N =
+     Has_sqrt_ge (N,1)
+     where
+       rec Has_sqrt_ge (N,R) =
+         R**2 gr N -> false
+         | R**2 eq N -> true
+         | Has_sqrt_ge (N,R+1)
+ in Print (Is_perfect_Square 4,
+           Is_perfect_Square 64,
+           Is_perfect_Square 3)

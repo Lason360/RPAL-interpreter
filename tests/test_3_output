@@ -1,0 +1,13 @@
+let
+.=
+..<ID:a>
+..<INT:1>
+.let
+..=
+...<ID:b>
+...<STRING:foo>
+..gamma
+...<ID:Print>
+...tau
+....<ID:a>
+....<ID:b>

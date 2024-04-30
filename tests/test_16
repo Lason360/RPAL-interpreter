@@ -1,0 +1,6 @@
+let Sum_list L =
+     Partial_sum (L, Order L)
+     where rec Partial_sum (L,N) =
+       N eq 0 -> 0
+       | L N + Partial_sum(L,N-1)
+   in Print ( Sum_list (2,3,4,5) )

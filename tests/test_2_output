@@ -1,0 +1,7 @@
+let
+.=
+..<ID:a>
+..<INT:1>
+.gamma
+..<ID:Print>
+..<ID:a>

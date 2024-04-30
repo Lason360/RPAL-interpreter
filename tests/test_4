@@ -1,0 +1,4 @@
+// 2foo is not a valid identifier
+let 2foo = 1
+in
+Print ( 2foo )

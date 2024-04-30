@@ -1,0 +1,6 @@
+
+let rec Sum N =  //printing sum of first N natural numbers
+    N eq 0 -> 0
+    | N + Sum (N-1)
+in
+Print (Sum 5)

@@ -1,0 +1,3 @@
+let rec fact x =
+    x eq 0 -> 1| x*fact(x-1)
+in Print(fact 10)

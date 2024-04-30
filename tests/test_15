@@ -1,0 +1,4 @@
+	let A = nil aug 1
+    and B=(2,3) and C=(4,5,6)
+  in let T=(A,B,C)
+  in Print(T)

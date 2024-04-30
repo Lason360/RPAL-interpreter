@@ -1,0 +1,13 @@
+let
+.and
+..=
+...<ID:X>
+...<INT:3>
+..=
+...<ID:Y>
+...<INT:5>
+.gamma
+..<ID:Print>
+..+
+...<ID:X>
+...<ID:Y>

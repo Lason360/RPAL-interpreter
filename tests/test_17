@@ -1,0 +1,8 @@
+     let Vector_sum(A,B) =
+     Partial_sum (A,B,Order A)
+     where rec Partial_sum (A,B,N) =
+       N eq 0 -> nil
+       | ( Partial_sum(A,B,N-1)
+           aug (A N + B N)
+         ) // parentheses required
+	in Print (Vector_sum((1,2,3),(4,5,6)))

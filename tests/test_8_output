@@ -1,0 +1,16 @@
+let
+.within
+..=
+...<ID:c>
+...<INT:3>
+..function_form
+...<ID:f>
+...<ID:x>
+...+
+....<ID:x>
+....<ID:c>
+.gamma
+..<ID:Print>
+..gamma
+...<ID:f>
+...<INT:3>
