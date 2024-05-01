@@ -9,12 +9,19 @@ class AbstractSyntaxTreeBuildError(Exception):
     def __str__(self):
         return f'{self.__class__.__name__}: {self.message}'
 
+#s is the implemented stack. holds the AST tree components
 global s
 s = stack.nodeStack()
+
+#holds the lexical analyzer token list
 global l
+
+#identified as <IDENTIFIER> tokens, but are RPAL keywords
 global keyWords
 keyWords = ['let','fn','where','aug','or','gr','ge','ls','le','eq','ne','nil','false','true','dummy','in','within','and']
+
 l = []
+
 def get_T(item_type):
     'Pop tokens from the lexical list'
     if not l:
@@ -23,21 +30,26 @@ def get_T(item_type):
         raise ValueError('Wrong type')
     else:
         return l.pop(0)
+    
 def isLempty():
     'Check token list is empty'
     if len(l) == 0:
         return True
     else:
         return False
+    
 def peek_T():
     'return the current token'
     return l[0]
+
 def peek_second_T():
     'return the second upcoming token'
     return l[1]
 
+#Expressions
 def E():
-    
+
+    # E -> ’let’ D ’in’ E => ’let’
     if not isLempty() and peek_T().type == '<IDENTIFIER>' and peek_T().content == 'let':
         get_T('<IDENTIFIER>')
         D()
@@ -49,6 +61,8 @@ def E():
         elif peek_T().content != 'in':
             raise AbstractSyntaxTreeBuildError("in expected after let")
         s.build_tree('let',2)
+
+    # E -> ’fn’ Vb+ ’.’ E => ’lambda’    
     elif not isLempty() and peek_T().type == '<IDENTIFIER>' and peek_T().content == 'fn':
         get_T('<IDENTIFIER>')
         Vb()
@@ -59,17 +73,24 @@ def E():
         get_T('<OPERATOR>')
         E()
         s.build_tree('lambda',count+1)
+    
+    # E -> Ew;
     else:
         Ew()
 
 def Ew():
+    # Ew -> T ’where’ Dr => ’where’
+    # Ew -> T;
     T()
     if not isLempty() and (peek_T().type == '<IDENTIFIER>') and (peek_T().content == 'where'):
         get_T('<IDENTIFIER>')
         Dr()
         s.build_tree('where',2)
 
+#Tuple Expression Expressions
 def T():
+    # T -> Ta ( ’,’ Ta )+ => ’tau’
+    # T -> Ta ;
     Ta()
     count = 1
     while not isLempty() and (peek_T().type == '<,>'):
@@ -80,12 +101,17 @@ def T():
         s.build_tree('tau', count)
 
 def Ta():
+    # Ta -> Ta ’aug’ Tc => ’aug’
+    # Ta -> Tc
     Tc()
     while not isLempty() and (peek_T().type == '<IDENTIFIER>' and peek_T().content == 'aug'):
         get_T()
         Tc()
         s.build_tree('aug', 2)
+
 def Tc():
+    # Tc -> B ’->’ Tc ’|’ Tc => ’->’
+    # Tc -> B
     B()
     if not isLempty() and (peek_T().type == '<OPERATOR>' and peek_T().content == '->'):
         get_T('<OPERATOR>')
@@ -95,81 +121,102 @@ def Tc():
         Tc()
         s.build_tree('->', 3)
 
+#Boolean Expression Production Rules
 def B():
+    # B -> B ’or’ Bt => ’or’
+    # B -> Bt
     Bt()
     while not isLempty() and (peek_T().type == '<IDENTIFIER>' and peek_T().content == 'or'):
         orObj = get_T('<IDENTIFIER>')
         Bt()
         s.build_tree('or', 2)
+
 def Bt():
+    # Bt -> Bt ’&’ Bs => ’&’
+    # Bt -> Bs
     Bs()
     while not isLempty() and (peek_T().type == '<OPERATOR>' and peek_T().content == '&'):
         ampersonObj = get_T('<OPERATOR>')
         Bs()
         s.build_tree('&', 2)
+
 def Bs():
+    # Bs -> ’not’ Bp => ’not’
     if not isLempty() and (peek_T().type == '<IDENTIFIER>' and peek_T().content == 'not'):
         notObj = get_T('<IDENTIFIER>')
         Bp()
         s.build_tree('not', 1)
+
+    # Bs -> Bp ;
     else:
         Bp()
 
 def Bp():
+
+    # Bp -> A ;
     A()
-    # greater than operations
+    
+    # Bp -> A ’gr’ A => ’gr’
     if not isLempty() and (peek_T().type == '<IDENTIFIER>' and peek_T().content == 'gr'):
         compObj = get_T('<IDENTIFIER>')
         A()
         s.build_tree('gr',2)
+
+    # Bp -> A ’>’ A => ’gr’
     elif not isLempty() and (peek_T().type == '<OPERATOR>' and peek_T().content == '>'):
         compObj = get_T('<OPERATOR>')
         A()
         s.build_tree('gr',2)
-
-    # greater than or equal operation
+    
+    # Bp -> A ’ge’ A => ’ge’
     elif not isLempty() and (peek_T().type == '<IDENTIFIER>' and peek_T().content == 'ge'):
         compObj = get_T('<IDENTIFIER>')
         A()
         s.build_tree('ge',2)
+
+    # Bp -> A ’>=’ A => ’ge’
     elif not isLempty() and (peek_T().type == '<OPERATOR>' and peek_T().content == '>='):
         compObj = get_T('<OPERATOR>')
         A()
         s.build_tree('ge',2)
 
-    #Less than
+    # Bp -> A ’ls’ A => ’ls’
     elif not isLempty() and (peek_T().type == '<IDENTIFIER>' and peek_T().content == 'ls'):
         compObj = get_T('<IDENTIFIER>')
         A()
         s.build_tree('ls',2)
+
+    # Bp -> A ’<’ A => ’ls’    
     elif not isLempty() and (peek_T().type == '<OPERATOR>' and peek_T().content == '<'):
         compObj = get_T('<OPERATOR>')
         A()
         s.build_tree('ls',2)
 
-    # Less than or equal
+    # Bp -> A ’le’ A => ’le’
     elif not isLempty() and (peek_T().type == '<IDENTIFIER>' and peek_T().content == 'le'):
         compObj = get_T('<IDENTIFIER>')
         A()
         s.build_tree('le', 2)
+
+    # Bp -> A ’<=’ A => ’le’    
     elif not isLempty() and (peek_T().type == '<OPERATOR>' and peek_T().content == '<='):
         compObj = get_T('<OPERATOR>')
         A()
         s.build_tree('le', 2)
 
-    #equal
+    # Bp -> A ’eq’ A => ’eq’
     elif not isLempty() and (peek_T().type == '<IDENTIFIER>' and peek_T().content == 'eq'):
         compObj = get_T('<IDENTIFIER>')
         A()
         s.build_tree('eq', 2)
 
-    #not equal
+    # Bp -> A ’ne’ A => ’ne’
     elif not isLempty() and (peek_T().type == '<IDENTIFIER>' and peek_T().content == 'ne'):
         compObj = get_T('<IDENTIFIER>')
         A()
         s.build_tree('ne', 2)
 
-
+#Arithmetic Expressions
 def A():
 
     if not isLempty() and peek_T().type =='<OPERATOR>' and (peek_T().content == '+'):
@@ -334,10 +381,9 @@ def Vl():
     if count>0:
         s.build_tree(',', count+1)
 
-with open('tests/test_2') as file:
+with open('tests/test_13') as file:
     file_content = file.read()
 file.close()
 l = lexicalAnalyzer.sendCharactersToLex(file_content)
-
 E()
 stack.preOrderTraversal(s.nodeList[0])
