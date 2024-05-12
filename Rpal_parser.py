@@ -267,7 +267,7 @@ def Ap():
     while not isLempty() and peek_T().type == '<OPERATOR>' and peek_T().content == '@':
         rootObj = get_T('<OPERATOR>')
         identifier = get_T('<IDENTIFIER>')
-        s.build_tree('<ID:'+identifier.content+'>',0)
+        s.build_tree(identifier,0)
         R()
         s.build_tree(rootObj.content, 3)
 
@@ -282,15 +282,15 @@ def Rn():
 
     if not isLempty() and peek_T().type == '<IDENTIFIER>' and not (peek_T().content in keyWords):
         identifier = get_T('<IDENTIFIER>')
-        s.build_tree('<ID:'+identifier.content+'>',0)
+        s.build_tree(identifier,0)
 
     elif not isLempty() and peek_T().type == '<INTEGER>':
         integer = get_T('<INTEGER>')
-        s.build_tree('<INT:'+integer.content+'>', 0)
+        s.build_tree(integer, 0)
 
     elif not isLempty() and peek_T().type == '<STRING>':
         string = get_T('<STRING>')
-        s.build_tree(string.content, 0)
+        s.build_tree(string, 0)
 
     elif not isLempty() and peek_T().type == '<IDENTIFIER>' and peek_T().content == 'true':
         true_identifier = get_T('<IDENTIFIER>')
@@ -340,7 +340,7 @@ def Db():
     if not isLempty() and peek_T().type == '<IDENTIFIER>':
 
         if peek_second_T().type in ['<IDENTIFIER>','<(>']:
-            s.build_tree('<ID:'+get_T('<IDENTIFIER>').content+'>',0)
+            s.build_tree(get_T('<IDENTIFIER>'),0)
             count = 1
             while not isLempty() and peek_T().content != '=':
                 count += 1
@@ -361,7 +361,7 @@ def Db():
 
 def Vb():
     if not isLempty() and (peek_T().type == '<IDENTIFIER>') and peek_T().content not in keyWords:
-        s.build_tree('<ID:'+get_T('<IDENTIFIER>').content+'>',0)
+        s.build_tree(get_T('<IDENTIFIER>'),0)
     elif not isLempty() and (peek_T().type == '<(>'):
         get_T('<(>')
         if not isLempty() and (peek_T().type == '<IDENTIFIER>'):
@@ -372,18 +372,19 @@ def Vb():
             s.build_tree('()',0)
 
 def Vl():
-    s.build_tree('<ID:'+get_T('<IDENTIFIER>').content+'>', 0)
+    s.build_tree(get_T('<IDENTIFIER>'), 0)
     count = 0
     while not isLempty() and (peek_T().type == '<,>'):
         count += 1
         element = get_T('<,>')
-        s.build_tree('<ID:'+get_T('<IDENTIFIER>').content+'>',0)
+        s.build_tree(get_T('<IDENTIFIER>'),0)
     if count>0:
         s.build_tree(',', count+1)
 
-with open('tests/test_13') as file:
+with open('tests/test_9') as file:
     file_content = file.read()
 file.close()
 l = lexicalAnalyzer.sendCharactersToLex(file_content)
 E()
 stack.preOrderTraversal(s.nodeList[0])
+
