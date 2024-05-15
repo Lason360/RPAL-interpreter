@@ -1,0 +1,1 @@
+stack.preOrderTraversal(st.head)
