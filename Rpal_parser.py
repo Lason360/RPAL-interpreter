@@ -381,12 +381,13 @@ def Vl():
     if count>0:
         s.build_tree(',', count+1)
 
-with open('tests/test_2') as file:
+with open('tests/test_7') as file:
     file_content = file.read()
 file.close()
 l = lexicalAnalyzer.sendCharactersToLex(file_content)
 E()
 ast = stack.tree(s.nodeList[0])
+
 stack.preOrderTraversal(ast.head)
 
 standardTree = s.nodeList[0].standardizeNode()
@@ -396,3 +397,5 @@ st = stack.tree(standardTree)
 print('standard tree')
 
 stack.preOrderTraversal(st.head)
+
+print(ast.head.childList[0].childList[1])

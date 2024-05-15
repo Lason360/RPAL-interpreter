@@ -29,7 +29,7 @@ class node:
         self.childList.append(child2)
 
     def standardizeNode(self):
-
+        
         newNodeChilds = []
         for c in self.childList:
             newNodeChilds.append(c.standardizeNode())
@@ -46,7 +46,7 @@ class node:
             gammaNode.appendChild(lambdaNode,E)
             return gammaNode
         
-        if self.content == 'where':
+        elif self.content == 'where':
             gammaNode = node('gamma')
             lambdaNode = node ('lambda')
             P = self.childList[0]
@@ -56,7 +56,7 @@ class node:
             gammaNode.appendChild(lambdaNode,E)
             return gammaNode
 
-        if self.content == 'within':
+        elif self.content == 'within':
             eqNode = node('=')
             gammaNode = node('gamma')
             lambdaNode = node('lambda')
@@ -71,7 +71,7 @@ class node:
 
             return eqNode
         
-        if self.content == 'rec':
+        elif self.content == 'rec':
             eqNode = node('=')
             gammaNode = node('gamma')
             lambdaNode = node('lambda')
@@ -85,7 +85,7 @@ class node:
             
             return eqNode
         
-        if self.content == 'fcn_form':
+        elif self.content == 'fcn_form':
             eqNode = node('=')
             numVar = len(self.childList)-2
             P = self.childList[0]
@@ -99,7 +99,7 @@ class node:
             head.childList.append(E)
             return eqNode
 
-        if self.content == 'and':
+        elif self.content == 'and':
             eqNode = node('=')
             xList = []
             eList = []
@@ -111,7 +111,7 @@ class node:
             self.childList[1].childList = eList
             return eqNode
         
-        if self.content == '@':
+        elif self.content == '@':
             gammaNode1 = node('gamma')
             gammaNode2 = node('gamma')
             E1 = self.childList[0]
@@ -121,7 +121,7 @@ class node:
             gammaNode2.appendChild(N,E1)
             return gammaNode2
 
-        if self.content == 'lambda':
+        elif self.content == 'lambda':
             numVar = len(self.childList)-1
             lambdaNode = node('lambda')
             E = self.childList[-1]
@@ -132,7 +132,8 @@ class node:
                     head.childList.append(node('lambda'))
                     head = head.childList[1]
             head.childList.append(E)
-        
+            return lambdaNode
+         
         else:
             return self
 
