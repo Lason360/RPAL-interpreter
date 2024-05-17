@@ -161,6 +161,7 @@ def usableStandardizedTree(root):
         return newRoot
 
 
+
 def preOrderTraversal(Node,str=''):
     definedNodes = ['let','lambda','where','tau','aug','->','or', '&','not','gr','ge','ls','le','eq','ne','neg','gamma','true','dummy','within','and','rec','=','fcn_form','()',',','+','-','*','/','**','@','nil','Ystar']
     # if Node.content not in definedNodes:

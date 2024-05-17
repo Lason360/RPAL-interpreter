@@ -383,7 +383,8 @@ def Vl():
     if count>0:
         s.build_tree(',', count+1)
 
-with open('tests/test_5') as file:
+with open('tests/test_3') as file:
+
     file_content = file.read()
     
 file.close()
@@ -409,3 +410,9 @@ cseMachine.generateContrlStruct(usable,0)
 # print(cseMachine.controlStructs)
 
 
+cseMachine.control += cseMachine.controlStructs[0]
+cseMachine.ss.append(cseMachine.environments[0].name)
+print(cseMachine.ss)
+
+cseMachine.applyRules()
+print(cseMachine.ss[0])
