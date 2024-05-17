@@ -1,12 +1,13 @@
 import stack
-global controlStructs
+# global controlStructs
 controlStructs = []
 
-global count
+# global count
 count = 0
 
 def generateContrlStruct(root, i):
     global count
+    global controlStructs
     while(len(controlStructs) <= i):
         controlStructs.append([])
     if (root.content == "lambda"):
@@ -95,10 +96,10 @@ def applyRules():
     global currentEnvironment
 
     while(len(control) > 0):
-        print(f"control: {control}")
-        print(f"ss: {ss}")
+        # print(f"control: {control}")
+        # print(f"ss: {ss}")
         symbol = control.pop()
-        print(f"symbol: {symbol}")
+        # print(f"symbol: {symbol}")
 
         # rule 1
         if (symbol.startswith("<") and symbol.endswith(">")):
