@@ -14,7 +14,7 @@ def lexAnalyzer(characters):
     undersCore = '_'
     operator_symbols = ['+', '-', '*', '<', '>', '&', '.', '@', '/', ':', '=', '˜', '|', '$', '!', '#', '%', 'ˆ', '_',
                         '[',
-                        ']', '{', '}', '"', '‘', '?']
+                        ']', '{', '}', '"', '?','‘']
     lexicans = []
     punctions = ['(', ')', ';', ',']
     currentToken = ''
@@ -81,7 +81,7 @@ def lexAnalyzer(characters):
 
                 elif c == "'" and characters[cCount + 1] == "'":
                     currentType = 'STRING'
-                    currentToken = "''"
+                    currentToken = ''
                     skip = 1
                 elif (c in punctions):
                     currentToken = c
@@ -152,14 +152,14 @@ def lexAnalyzer(characters):
                     continue
 
                 try:
-                    if characters[cCount:cCount + 2] == "''":
+                    if c == "'" and characters[cCount + 1] == "'":
                         skip = 1
-                        currentToken = currentToken + "''"
                         newLex = element(currentToken, currentType)
                         lexicans.append(newLex)
                         currentToken = ''
                         currentType = None
                 except:
+                    print('hi')
                     continue
 
             elif currentType == 'SPACES':
