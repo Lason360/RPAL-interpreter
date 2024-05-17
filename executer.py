@@ -5,7 +5,7 @@ import cseMachine
 
 
 #save the file in the code directory and paste the name of the file here
-with open('tests/test_9') as file:
+with open('tests/test_5') as file:
     file_content = file.read()
     
 file.close()
@@ -44,3 +44,18 @@ usable = stack.usableStandardizedTree(st.head)
 #Print usable tree if needed
 #print('-----------usable st----------------')
 # stack.preOrderTraversalUsable(usable)
+
+# Running CSE Machine
+# Generating control structures
+cseMachine.generateContrlStruct(usable, 0)
+
+cseMachine.control += cseMachine.controlStructs[0]
+cseMachine.ss.append(cseMachine.environments[0].name)
+
+# Print control structures if needed
+# print('-----------control structures------------')
+# print(cseMachine.controlStructs)
+
+
+cseMachine.applyRules()
+print(f"final output: {cseMachine.ss[0]}")
