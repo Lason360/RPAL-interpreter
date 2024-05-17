@@ -12,10 +12,6 @@ class tree:
     def __init__(self, N):
         self.head = N
     
-# def standardize(self):
-#     for c in self.head.childList:
-#         c.standardize()
-#     if self.head.content == 'let':
 
 
 class node:
@@ -138,7 +134,7 @@ class node:
             return self
 
 def preOrderTraversal(Node,str=''):
-    definedNodes = ['let','lambda','where','tau','aug','->','or', '&','not','gr','ge','ls','le','eq','ne','neg','gamma','true','dummy','within','and','rec','=','fcn_form','()',',','+','-','*','/','**','@']
+    definedNodes = ['let','lambda','where','tau','aug','->','or', '&','not','gr','ge','ls','le','eq','ne','neg','gamma','true','dummy','within','and','rec','=','fcn_form','()',',','+','-','*','/','**','@','nil','Ystar']
     if Node.content not in definedNodes:
         if Node.content.type == '<IDENTIFIER>':
             printFormat = '<ID: '+ Node.content.content +'>'
