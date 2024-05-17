@@ -42,4 +42,5 @@ st = stack.tree(standardTree)
 usable = stack.usableStandardizedTree(st.head)
 
 #Print usable tree if needed
+#print('-----------usable st----------------')
 # stack.preOrderTraversalUsable(usable)
