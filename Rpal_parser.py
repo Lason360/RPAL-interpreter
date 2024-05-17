@@ -1,5 +1,6 @@
 import lexicalAnalyzer  #RPal Lexical analyzer
 import stack            #stack and the tree implementation
+import cseMachine
 # import CSEmachine
 
 class AbstractSyntaxTreeBuildError(Exception):
@@ -382,7 +383,7 @@ def Vl():
     if count>0:
         s.build_tree(',', count+1)
 
-with open('tests/hw.txt') as file:
+with open('tests/test_2') as file:
     file_content = file.read()
     
 file.close()
@@ -391,16 +392,24 @@ l = lexicalAnalyzer.sendCharactersToLex(file_content)
 E()
 ast = stack.tree(s.nodeList[0])
 
-stack.preOrderTraversal(ast.head)
+# stack.preOrderTraversal(ast.head)
 
-# standardTree = s.nodeList[0].standardizeNode()
+standardTree = s.nodeList[0].standardizeNode()
 
-# st = stack.tree(standardTree)
+st = stack.tree(standardTree)
 
-# print('standard tree')
+print('standard tree')
 
 # stack.preOrderTraversal(st.head)
 
+usable = stack.usableStandardizedTree(st.head)
+
+stack.preOrderTraversalUsable(usable)
+
+cseMachine.generateContrlStruct(st.head,0)
+
+print(cseMachine.controlStructs)
 # CSEmachine.flattenStandardTree(st.head)
 
 # print(CSEmachine.appExp)
+
