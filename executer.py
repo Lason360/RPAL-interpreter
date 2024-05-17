@@ -56,6 +56,6 @@ cseMachine.ss.append(cseMachine.environments[0].name)
 # print('-----------control structures------------')
 # print(cseMachine.controlStructs)
 
-
+# applying cse machine rules
 cseMachine.applyRules()
 print(f"final output: {cseMachine.ss[0]}")
