@@ -36,7 +36,7 @@ class node:
         self.childList = newNodeChilds
         
         
-        if self.content == 'let':
+        if self.content == 'let' and self.childList[0].content == "=":
             gammaNode = node('gamma')
             lambdaNode = node('lambda')
             X = self.childList[0].childList[0]
@@ -46,7 +46,7 @@ class node:
             gammaNode.appendChild(lambdaNode,E)
             return gammaNode
         
-        elif self.content == 'where':
+        elif self.content == 'where' and self.childList[1].content == "=":
             gammaNode = node('gamma')
             lambdaNode = node ('lambda')
             P = self.childList[0]

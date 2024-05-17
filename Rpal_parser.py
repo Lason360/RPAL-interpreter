@@ -388,14 +388,14 @@ l = lexicalAnalyzer.sendCharactersToLex(file_content)
 E()
 ast = stack.tree(s.nodeList[0])
 
-stack.preOrderTraversal(ast.head)
+# stack.preOrderTraversal(ast.head)
 
-standardTree = s.nodeList[0].standardizeNode()
+# standardTree = s.nodeList[0].standardizeNode()
 
-st = stack.tree(standardTree)
+# st = stack.tree(standardTree)
 
-print('standard tree')
+# print('\n\nstandard tree')
 
-stack.preOrderTraversal(st.head)
+# stack.preOrderTraversal(st.head)
 
-print(ast.head.childList[0].childList[1])
+# print(ast.head.childList[0].childList[1])
