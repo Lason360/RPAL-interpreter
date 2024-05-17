@@ -1,14 +1,16 @@
 import stack
-global controlStructs
+# global controlStructs
 controlStructs = []
 
-global count
+# global count
 count = 0
 
 def generateContrlStruct(root, i):
     global count
+    global controlStructs
     while(len(controlStructs) <= i):
         controlStructs.append([])
+        
     if (root.content == "lambda"):
         count += 1
         childL = root.childList[0]
@@ -95,7 +97,10 @@ def applyRules():
     global currentEnvironment
 
     while(len(control) > 0):
+        # print(f"control: {control}")
+        # print(f"ss: {ss}")
         symbol = control.pop()
+        # print(f"symbol: {symbol}")
 
         # rule 1
         if (symbol.startswith("<") and symbol.endswith(">")):
@@ -112,6 +117,7 @@ def applyRules():
 
             if (type(stackSymbol1) == str and stackSymbol1.startswith("lambda")):
                 currentEnvironment = len(environments)
+                # print(f"currentEnv: {currentEnvironment}")
                 lambdaData = stackSymbol1.split("_")
 
                 parent = environments[int(lambdaData[3])]
@@ -217,6 +223,7 @@ def applyRules():
             if (symbol == "+"):
                 ss.append(rand1+rand2)
             elif (symbol == "-"):
+                # print(rand1, rand2)
                 ss.append(rand1-rand2)
             elif (symbol == "*"):
                 ss.append(rand1*rand2)
@@ -251,14 +258,14 @@ def applyRules():
             rand = ss.pop()
             if (symbol == "not"):
                 ss.append(not rand)
-            elif (symbol == "-"):
+            elif (symbol == "neg"):
                 ss.append(-rand)
 
         # rule 8
         elif (symbol == "beta"):
             B = ss.pop()
-            deltaElse = ss.pop()
-            deltaThen = ss.pop()
+            deltaElse = control.pop()
+            deltaThen = control.pop()
             if (B):
                 control += controlStructs[int(deltaThen.split("_")[1])]
             else:
@@ -275,3 +282,12 @@ def applyRules():
 
         elif(symbol == "Ystar"):
             ss.append(symbol)
+
+builtInFuncs = ["Order", "Print", "print", "Conc", "Stern", "Stem", "Isinteger", "Istruthvalue", "Isstring", "Istuple", "Isfunction"]
+
+control = []
+ss = []
+environments = [EnvironmentNode(0, None)]
+currentEnvironment = 0
+
+control.append(environments[0].name)
