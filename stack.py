@@ -12,10 +12,6 @@ class tree:
     def __init__(self, N):
         self.head = N
     
-# def standardize(self):
-#     for c in self.head.childList:
-#         c.standardize()
-#     if self.head.content == 'let':
 
 
 class node:
@@ -136,9 +132,18 @@ class node:
          
         else:
             return self
+        
+def usableStandardizedTree(root):
+    definedNodes = ['let','lambda','where','tau','aug','->','or', '&','not','gr','ge','ls','le','eq','ne','neg','gamma','true','dummy','within','and','rec','=','fcn_form','()',',','+','-','*','/','**','@','nil','Ystar']
+    if root.content not in definedNodes:
+        root.content = root.content.content
+    for c in root.childList:
+        usableStandardizedTree(c)
+    return root
+
 
 def preOrderTraversal(Node,str=''):
-    definedNodes = ['let','lambda','where','tau','aug','->','or', '&','not','gr','ge','ls','le','eq','ne','neg','gamma','true','dummy','within','and','rec','=','fcn_form','()',',','+','-','*','/','**','@']
+    definedNodes = ['let','lambda','where','tau','aug','->','or', '&','not','gr','ge','ls','le','eq','ne','neg','gamma','true','dummy','within','and','rec','=','fcn_form','()',',','+','-','*','/','**','@','nil','Ystar']
     if Node.content not in definedNodes:
         if Node.content.type == '<IDENTIFIER>':
             printFormat = '<ID: '+ Node.content.content +'>'
@@ -151,3 +156,8 @@ def preOrderTraversal(Node,str=''):
     print(str+printFormat)
     for c in Node.childList:
         preOrderTraversal(c,str+'.')
+
+def preOrderTraversalUsable(head,str=''):
+    print(str+head.content)
+    for c in head.childList:
+        preOrderTraversalUsable(c,str+'.')
