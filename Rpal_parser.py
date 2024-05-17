@@ -384,13 +384,14 @@ def Vl():
         s.build_tree(',', count+1)
 
 with open('tests/test_3') as file:
+
     file_content = file.read()
     
 file.close()
 l = lexicalAnalyzer.sendCharactersToLex(file_content)
 
 E()
-ast = stack.tree(s.nodeList[0])
+# ast = stack.tree(s.nodeList[0])
 
 # stack.preOrderTraversal(ast.head)
 
@@ -398,20 +399,16 @@ standardTree = s.nodeList[0].standardizeNode()
 
 st = stack.tree(standardTree)
 
-print('standard tree')
-
-# stack.preOrderTraversal(st.head)
+stack.preOrderTraversal(st.head)
 
 usable = stack.usableStandardizedTree(st.head)
 
 stack.preOrderTraversalUsable(usable)
 
-cseMachine.generateContrlStruct(st.head,0)
+cseMachine.generateContrlStruct(usable,0)
 
-print(cseMachine.controlStructs)
-# CSEmachine.flattenStandardTree(st.head)
+# print(cseMachine.controlStructs)
 
-# print(CSEmachine.appExp)
 
 cseMachine.control += cseMachine.controlStructs[0]
 cseMachine.ss.append(cseMachine.environments[0].name)

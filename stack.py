@@ -135,32 +135,48 @@ class node:
         
 def usableStandardizedTree(root):
     definedNodes = ['let','lambda','where','tau','aug','->','or', '&','not','gr','ge','ls','le','eq','ne','neg','gamma','true','dummy','within','and','rec','=','fcn_form','()',',','+','-','*','/','**','@','nil','Ystar']
-    print(root)
+
     if root.content not in definedNodes:
-        # root.content = root.content.content
+        
         if root.content.type == '<IDENTIFIER>':
-            root.content = '<ID:'+ root.content.content +'>'
+            newRoot = node('<ID:'+ root.content.content +'>')
+            return newRoot
+            # root.content = '<ID:'+ root.content.content +'>'
         elif root.content.type == '<INTEGER>':
-            root.content = '<INT:'+ root.content.content +'>'
+            newRoot = node('<INT:'+ root.content.content +'>')
+            return newRoot
+            # root.content = '<INT:'+ root.content.content +'>'
         elif root.content.type == '<STRING>':
-            root.content = '<STR:'+ root.content.content +'>' 
-    for c in root.childList:
-        usableStandardizedTree(c)
-    return root
+            newRoot = node('<STR:'+ root.content.content +'>' )
+            return newRoot
+            # root.content = '<STR:'+ root.content.content +'>' 
+    
+    else:
+        newChildList=[]
+        for c in root.childList:
+            newC = usableStandardizedTree(c)
+            newChildList.append(newC)
+        newRoot = node(root.content)
+        newRoot.childList = newChildList
+        return newRoot
+
 
 
 def preOrderTraversal(Node,str=''):
     definedNodes = ['let','lambda','where','tau','aug','->','or', '&','not','gr','ge','ls','le','eq','ne','neg','gamma','true','dummy','within','and','rec','=','fcn_form','()',',','+','-','*','/','**','@','nil','Ystar']
-    if Node.content not in definedNodes:
-        if Node.content.type == '<IDENTIFIER>':
-            printFormat = '<ID:'+ Node.content.content +'>'
-        elif Node.content.type == '<INTEGER>':
-            printFormat = '<INT:'+ Node.content.content +'>'
-        elif Node.content.type == '<STRING>':
-            printFormat = '<STR:'+ Node.content.content +'>' 
+    # if Node.content not in definedNodes:
+    #     if Node.content.type == '<IDENTIFIER>':
+    #         printFormat = '<ID:'+ Node.content.content +'>'
+    #     elif Node.content.type == '<INTEGER>':
+    #         printFormat = '<INT:'+ Node.content.content +'>'
+    #     elif Node.content.type == '<STRING>':
+    #         printFormat = '<STR:'+ Node.content.content +'>' 
+    # else:
+    printFormat = Node.content 
+    if Node.content in definedNodes:          
+        print(str,printFormat)
     else:
-        printFormat = Node.content           
-    print(str+printFormat)
+        print(str,printFormat.content)
     for c in Node.childList:
         preOrderTraversal(c,str+'.')
 
