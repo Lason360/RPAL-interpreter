@@ -415,3 +415,9 @@ def Vl():
         s.build_tree(',', count+1)
 
 
+cseMachine.control += cseMachine.controlStructs[0]
+cseMachine.ss.append(cseMachine.environments[0].name)
+# print(cseMachine.ss)
+
+cseMachine.applyRules()
+print(f"final output: {cseMachine.ss[0]}")

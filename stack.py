@@ -153,7 +153,7 @@ def usableStandardizedTree(root):
     #defined nodes are diretly refferenced from node.content
 
     if root.content not in definedNodes:
-        
+        # root.content = root.content.content
         if root.content.type == '<IDENTIFIER>':
             #identifier node content
             newRoot = node('<ID:'+ root.content.content +'>')
@@ -182,6 +182,13 @@ def usableStandardizedTree(root):
 def preOrderTraversal(Node,str=''):
     #Preorder traversal for ast
     definedNodes = ['let','lambda','where','tau','aug','->','or', '&','not','gr','ge','ls','le','eq','ne','neg','gamma','true','dummy','within','and','rec','=','fcn_form','()',',','+','-','*','/','**','@','nil','Ystar']
+    if Node.content not in definedNodes:
+        if Node.content.type == '<IDENTIFIER>':
+            printFormat = '<ID:'+ Node.content.content +'>'
+        elif Node.content.type == '<INTEGER>':
+            printFormat = '<INT:'+ Node.content.content +'>'
+        elif Node.content.type == '<STRING>':
+            printFormat = '<STR:'+ Node.content.content +'>' 
     if Node.content not in definedNodes:
         if Node.content.type == '<IDENTIFIER>':
             printFormat = '<ID:'+ Node.content.content +'>'
