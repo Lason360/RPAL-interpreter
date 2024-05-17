@@ -1,12 +1,17 @@
 class element:
+    #lexical token object definition
     content = ''
 
     def __init__(self, token, type):
+
         self.content = token
         self.type = '<' + type + '>'
 
 
 def lexAnalyzer(characters):
+#converts text to a list of lexical tokens
+    
+    # common characters
     letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's',
                't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
                'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
@@ -17,20 +22,23 @@ def lexAnalyzer(characters):
                         ']', '{', '}', '"', '?','‘']
     lexicans = []
     punctions = ['(', ')', ';', ',']
+    
+    # initializing configurations
     currentToken = ''
     currentType = None
     skip = 0
 
     cCount = 0
     for c in characters:
-        # print(cCount)
         if skip > 0:
             skip -= 1
             continue
 
         try:
             if currentType is None:
+                # Defining a new token
                 if (c in letters):
+                    # Start of identifier token
                     currentType = 'IDENTIFIER'
                     currentToken = c
                     try:
@@ -42,6 +50,7 @@ def lexAnalyzer(characters):
                     except:
                         continue
                 elif (c in digits):
+                    #start of integer token
                     currentType = 'INTEGER'
                     currentToken = c
                     try:
@@ -53,6 +62,7 @@ def lexAnalyzer(characters):
                     except:
                         continue
                 elif (c in operator_symbols) and (c != '/' and characters[cCount + 1] != '/'):
+                    #defining operators // signifies comments
                     currentType = 'OPERATOR'
                     currentToken = c
                     try:
@@ -64,10 +74,12 @@ def lexAnalyzer(characters):
                     except:
                         continue
                 elif (c == '/') and (characters[cCount + 1] == '/'):
+                    #start of comment token
                     currentType = 'COMMENT'
                     currentToken = '//'
                     skip = 1
                 elif (c == ' ' or c == '\n' or c == '\t'):
+                    #types of spaces that are rejected when parsing
                     currentType = 'SPACES'
                     currentToken = c
                     try:
@@ -80,6 +92,7 @@ def lexAnalyzer(characters):
                         continue
 
                 elif c == "'" and characters[cCount + 1] == "'":
+                    #start of string. strings have to start with '' and end with ''
                     currentType = 'STRING'
                     currentToken = ''
                     skip = 1
@@ -92,6 +105,7 @@ def lexAnalyzer(characters):
                     currentType = None
 
             elif currentType == 'IDENTIFIER':
+                #extension of identifier token
                 if c in letters or c in digits or c == '_':
                     currentToken += c
 
@@ -107,6 +121,7 @@ def lexAnalyzer(characters):
 
 
             elif currentType == 'INTEGER':
+                #extension of integer token
                 if c in digits:
                     currentToken += c
                 try:
@@ -119,10 +134,12 @@ def lexAnalyzer(characters):
                     continue
 
             elif currentType == 'OPERATOR':
+                #extension of operator token
                 if c in operator_symbols:
                     currentToken += c
                 try:
                     if c in operator_symbols and characters[cCount + 1] not in operator_symbols:
+
                         newLex = element(currentToken, currentType)
                         lexicans.append(newLex)
                         currentToken = ''
@@ -131,6 +148,7 @@ def lexAnalyzer(characters):
                     continue
 
             elif currentType == 'STRING':
+                #extension of string token
 
                 if c in letters + digits + operator_symbols + [' '] + punctions:
                     currentToken += c
@@ -159,10 +177,10 @@ def lexAnalyzer(characters):
                         currentToken = ''
                         currentType = None
                 except:
-                    print('hi')
                     continue
 
             elif currentType == 'SPACES':
+                #extension of spaces
                 if c in [' ','\t','\n']:
                     currentToken += c
                 try:
@@ -174,6 +192,7 @@ def lexAnalyzer(characters):
                 except:
                     continue
             elif currentType == 'COMMENT':
+                #extension of comments
                 if c in letters + digits + operator_symbols + [' ','\t']:
                     currentToken += c
                 try:
@@ -197,16 +216,19 @@ def lexAnalyzer(characters):
             cCount += 1 + skip
             continue
     if currentType != None:
+        #adding final lexical
         newLex = element(currentToken, currentType)
         lexicans.append(newLex)
         currentToken = ''
         currentType = None
 
+    #step of the parser, rejecting comments and spaces
     new_lexican = [x for x in lexicans if x.type != '<DELETE>']
     return new_lexican
 
 
 def sendCharactersToLex(string):
+    #list the input and send to be tokenized
     characters = list(string)
     lexicanList = lexAnalyzer(characters)
     return lexicanList

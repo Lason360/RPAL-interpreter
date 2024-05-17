@@ -1,7 +1,5 @@
-import lexicalAnalyzer  #RPal Lexical analyzer
 import stack            #stack and the tree implementation
-import cseMachine
-# import CSEmachine
+
 
 class AbstractSyntaxTreeBuildError(Exception):
     def __init__(self, message):
@@ -221,6 +219,8 @@ def Bp():
 #Arithmetic Expressions
 def A():
 
+    # A -> A ’+’ At => ’+’
+    # A -> A ’-’ At => ’-’
     if not isLempty() and peek_T().type =='<OPERATOR>' and (peek_T().content == '+'):
 
         posObj = get_T('<OPERATOR>')
@@ -229,6 +229,8 @@ def A():
             rootObj = get_T('<OPERATOR>')
             At()
             s.build_tree(rootObj.content,2)
+
+    # A -> ’-’ At => 'neg'
     elif not isLempty() and peek_T().type =='<OPERATOR>' and (peek_T().content == '-'):
 
         negObj = get_T('<OPERATOR>')
@@ -239,7 +241,7 @@ def A():
             At()
             s.build_tree(rootObj.content,2)
     else:
-
+        # A -> At
         At()
 
         while not isLempty() and peek_T().type == '<OPERATOR>' and (peek_T().content == '+' or peek_T().content == '-'):
@@ -248,14 +250,16 @@ def A():
             s.build_tree(rootObj.content,2)
 
 def At():
-
-    Af()
-
+    # At -> At ’*’ Af => ’*’
+    # At -> At ’/’ Af => ’/’
+    Af()    
     while not isLempty() and peek_T().type == '<OPERATOR>' and (peek_T().content == '*' or peek_T().content == '/'):
         rootObj = get_T('<OPERATOR>')
         Af()
         s.build_tree(rootObj.content,2)
 def Af():
+    # Af -> Ap ’**’ Af => ’**’
+    # Af -> Ap
     Ap()
 
     while not isLempty() and peek_T().type == '<OPERATOR>' and peek_T().content == '**':
@@ -264,6 +268,8 @@ def Af():
         s.build_tree(rootObj.content,2)
 
 def Ap():
+#   Ap -> Ap ’@’ ’<IDENTIFIER>’ R => ’@’
+#   Ap -> R 
     R()
 
     while not isLempty() and peek_T().type == '<OPERATOR>' and peek_T().content == '@':
@@ -274,6 +280,8 @@ def Ap():
         s.build_tree(rootObj.content, 3)
 
 def R():
+    # R -> R Rn => ’gamma’
+    # R -> Rn 
     Rn()
     first = ['<IDENTIFIER>','<INTEGER>','<STRING>','<(>']
     firstKeyWords = ['true','false','nil','dummy']
@@ -281,46 +289,60 @@ def R():
         Rn()
         s.build_tree('gamma', 2)
 def Rn():
-
+    # Rn -> ’<IDENTIFIER>’
     if not isLempty() and peek_T().type == '<IDENTIFIER>' and not (peek_T().content in keyWords):
         identifier = get_T('<IDENTIFIER>')
         s.build_tree(identifier,0)
 
+    # Rn -> ’<INTEGER>’
     elif not isLempty() and peek_T().type == '<INTEGER>':
         integer = get_T('<INTEGER>')
         s.build_tree(integer, 0)
 
+    # Rn -> ’<STRING>’
     elif not isLempty() and peek_T().type == '<STRING>':
         string = get_T('<STRING>')
         s.build_tree(string, 0)
 
+    # Rn -> ’true’
     elif not isLempty() and peek_T().type == '<IDENTIFIER>' and peek_T().content == 'true':
         true_identifier = get_T('<IDENTIFIER>')
         s.build_tree(true_identifier.content, 0)
 
+    # Rn -> ’false’
     elif not isLempty() and peek_T().type == '<IDENTIFIER>' and peek_T().content == 'false':
         false_identifier = get_T('<IDENTIFIER>')
         s.build_tree(false_identifier.content, 0)
 
+    # Rn -> ’nil’
     elif not isLempty() and peek_T().type == '<IDENTIFIER>' and peek_T().content == 'nil':
         nil_identifier = get_T('<IDENTIFIER>')
         s.build_tree(nil_identifier.content, 0)
+
+    # Rn -> ’(’ E ’)’
     elif not isLempty() and peek_T().type == '<(>':
         get_T('<(>')
         E()
         get_T('<)>')
+    
+    # Rn -> ’dummy’
     elif not isLempty() and peek_T().type == '<IDENTIFIER>' and peek_T().content == 'dummy':
         dummy_identifier = get_T('<IDENTIFIER>')
         s.build_tree(dummy_identifier.content, 0)
 
 def D():
 
+    # D -> Da ’within’ D => ’within’
+    # D -> Da
     Da()
     if not isLempty() and peek_T().type == '<IDENTIFIER>' and peek_T().content == 'within':
+        get_T('<IDENTIFIER>')
         D()
         s.build_tree('within',2)
 
 def Da():
+    # Da -> Dr ( ’and’ Dr )+ => ’and’
+    # Da -> Dr ;
     Dr()
     count = 1
     while not isLempty() and peek_T().type == '<IDENTIFIER>' and peek_T().content == 'and':
@@ -331,6 +353,8 @@ def Da():
         s.build_tree('and',count)
 
 def Dr():
+    # Dr -> ’rec’ Db => ’rec’
+    # Dr -> Db
     if not isLempty() and peek_T().type == '<IDENTIFIER>' and peek_T().content == 'rec':
         get_T('<IDENTIFIER>')
         Db()
@@ -342,6 +366,7 @@ def Db():
     if not isLempty() and peek_T().type == '<IDENTIFIER>':
 
         if peek_second_T().type in ['<IDENTIFIER>','<(>']:
+            # Db -> ’<IDENTIFIER>’ Vb+ ’=’ E => ’fcn_form’
             s.build_tree(get_T('<IDENTIFIER>'),0)
             count = 1
             while not isLempty() and peek_T().content != '=':
@@ -351,11 +376,13 @@ def Db():
             E()
             s.build_tree('fcn_form',count+1)
         else:
+            # Db -> Vl ’=’ E => ’=’
             Vl()
             get_T('<OPERATOR>')
             E()
             s.build_tree('=',2)
     elif not isLempty() and peek_T().type == '<(>':
+        # Db -> ’(’ D ’)’ ;
         get_T('<(>')
         D()
         get_T('<)>')
@@ -363,17 +390,21 @@ def Db():
 
 def Vb():
     if not isLempty() and (peek_T().type == '<IDENTIFIER>') and peek_T().content not in keyWords:
+        # Vb -> ’<IDENTIFIER>’
         s.build_tree(get_T('<IDENTIFIER>'),0)
     elif not isLempty() and (peek_T().type == '<(>'):
         get_T('<(>')
         if not isLempty() and (peek_T().type == '<IDENTIFIER>'):
+            # Vb -> ’(’ Vl ’)’
             Vl()
             get_T('<)>')
         else:
+            # Vb -> ’(’ ’)’ => ’()’;
             get_T('<)>')
             s.build_tree('()',0)
 
-def Vl():
+def Vl(): 
+    # Vl -> ’<IDENTIFIER>’ list ’,’ => ’,’?;
     s.build_tree(get_T('<IDENTIFIER>'), 0)
     count = 0
     while not isLempty() and (peek_T().type == '<,>'):
@@ -382,30 +413,5 @@ def Vl():
         s.build_tree(get_T('<IDENTIFIER>'),0)
     if count>0:
         s.build_tree(',', count+1)
-
-with open('tests/test_5') as file:
-    file_content = file.read()
-    
-file.close()
-l = lexicalAnalyzer.sendCharactersToLex(file_content)
-
-E()
-# ast = stack.tree(s.nodeList[0])
-
-# stack.preOrderTraversal(ast.head)
-
-standardTree = s.nodeList[0].standardizeNode()
-
-st = stack.tree(standardTree)
-
-stack.preOrderTraversal(st.head)
-
-usable = stack.usableStandardizedTree(st.head)
-
-stack.preOrderTraversalUsable(usable)
-
-cseMachine.generateContrlStruct(usable,0)
-
-# print(cseMachine.controlStructs)
 
 
