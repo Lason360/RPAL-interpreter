@@ -135,8 +135,15 @@ class node:
         
 def usableStandardizedTree(root):
     definedNodes = ['let','lambda','where','tau','aug','->','or', '&','not','gr','ge','ls','le','eq','ne','neg','gamma','true','dummy','within','and','rec','=','fcn_form','()',',','+','-','*','/','**','@','nil','Ystar']
+    print(root)
     if root.content not in definedNodes:
-        root.content = root.content.content
+        # root.content = root.content.content
+        if root.content.type == '<IDENTIFIER>':
+            root.content = '<ID: '+ root.content.content +'>'
+        elif root.content.type == '<INTEGER>':
+            root.content = '<INT: '+ root.content.content +'>'
+        elif root.content.type == '<STRING>':
+            root.content = '<STR: '+ root.content.content +'>' 
     for c in root.childList:
         usableStandardizedTree(c)
     return root
