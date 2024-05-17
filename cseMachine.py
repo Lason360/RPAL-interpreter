@@ -275,3 +275,12 @@ def applyRules():
 
         elif(symbol == "Ystar"):
             ss.append(symbol)
+
+builtInFuncs = ["Order", "Print", "print", "Conc", "Stern", "Stem", "Isinteger", "Istruthvalue", "Isstring", "Istuple", "Isfunction"]
+
+control = []
+ss = []
+environments = [EnvironmentNode(0, None)]
+currentEnvironment = 0
+
+control.append(environments[0].name)

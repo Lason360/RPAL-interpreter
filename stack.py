@@ -139,11 +139,11 @@ def usableStandardizedTree(root):
     if root.content not in definedNodes:
         # root.content = root.content.content
         if root.content.type == '<IDENTIFIER>':
-            root.content = '<ID: '+ root.content.content +'>'
+            root.content = '<ID:'+ root.content.content +'>'
         elif root.content.type == '<INTEGER>':
-            root.content = '<INT: '+ root.content.content +'>'
+            root.content = '<INT:'+ root.content.content +'>'
         elif root.content.type == '<STRING>':
-            root.content = '<STR: '+ root.content.content +'>' 
+            root.content = '<STR:'+ root.content.content +'>' 
     for c in root.childList:
         usableStandardizedTree(c)
     return root
