@@ -198,7 +198,8 @@ def preOrderTraversal(Node,str=''):
             printFormat = '<STR:'+ Node.content.content +'>' 
     else:
         printFormat = Node.content          
-        print(str+printFormat)
+        
+    print(str+printFormat)
     for c in Node.childList:
         preOrderTraversal(c,str+'.')
 
