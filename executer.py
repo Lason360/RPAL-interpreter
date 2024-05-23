@@ -5,7 +5,7 @@ import cseMachine
 
 
 #save the file in the code directory and paste the name of the file here
-with open('tests/test_5') as file:
+with open('tests/test_11') as file:
     file_content = file.read()
     
 file.close()
@@ -25,9 +25,9 @@ Rpal_parser.E()
 ast = stack.tree(Rpal_parser.s.nodeList[0])
 
 #Pre order traversal of ast
-print('-----------AST------------')
-stack.preOrderTraversal(ast.head)
-print('-----------AST------------')
+# print('-----------AST------------')
+# stack.preOrderTraversal(ast.head)
+# print('-----------AST------------')
 
 #Standardize AST
 standardTree = Rpal_parser.s.nodeList[0].standardizeNode()
@@ -55,6 +55,7 @@ cseMachine.ss.append(cseMachine.environments[0].name)
 # Print control structures if needed
 # print('-----------control structures------------')
 # print(cseMachine.controlStructs)
+# print('-----------control structures------------')
 
 # applying cse machine rules
 cseMachine.applyRules()

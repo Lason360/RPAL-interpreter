@@ -98,9 +98,10 @@ def applyRules():
 
     while(len(control) > 0):
         # print(f"control: {control}")
-        # print(f"ss: {ss}")
+        # print(f"stack: {ss}")
         symbol = control.pop()
         # print(f"symbol: {symbol}")
+        # print("\n")
 
         # rule 1
         if (symbol.startswith("<") and symbol.endswith(">")):
@@ -223,7 +224,6 @@ def applyRules():
             if (symbol == "+"):
                 ss.append(rand1+rand2)
             elif (symbol == "-"):
-                # print(rand1, rand2)
                 ss.append(rand1-rand2)
             elif (symbol == "*"):
                 ss.append(rand1*rand2)
@@ -282,6 +282,9 @@ def applyRules():
 
         elif(symbol == "Ystar"):
             ss.append(symbol)
+
+        elif(symbol == "nil"):
+            ss.append(())
 
 builtInFuncs = ["Order", "Print", "print", "Conc", "Stern", "Stem", "Isinteger", "Istruthvalue", "Isstring", "Istuple", "Isfunction"]
 
