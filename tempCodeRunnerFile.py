@@ -1,1 +1,3 @@
-stack.preOrderTraversal(st.head)
+
+stack.preOrderTraversal(ast.head)
+print('-----------AST------------')

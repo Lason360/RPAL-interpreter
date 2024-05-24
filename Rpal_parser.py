@@ -279,6 +279,7 @@ def Ap():
         R()
         s.build_tree(rootObj.content, 3)
 
+#Rators and Rands
 def R():
     # R -> R Rn => ’gamma’
     # R -> Rn 
@@ -330,6 +331,7 @@ def Rn():
         dummy_identifier = get_T('<IDENTIFIER>')
         s.build_tree(dummy_identifier.content, 0)
 
+#Definitions
 def D():
 
     # D -> Da ’within’ D => ’within’
@@ -387,7 +389,7 @@ def Db():
         D()
         get_T('<)>')
 
-
+#Variables
 def Vb():
     if not isLempty() and (peek_T().type == '<IDENTIFIER>') and peek_T().content not in keyWords:
         # Vb -> ’<IDENTIFIER>’

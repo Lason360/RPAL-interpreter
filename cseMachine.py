@@ -97,11 +97,8 @@ def applyRules():
     global currentEnvironment
 
     while(len(control) > 0):
-        # print(f"control: {control}")
-        # print(f"stack: {ss}")
+
         symbol = control.pop()
-        # print(f"symbol: {symbol}")
-        # print("\n")
 
         # rule 1
         if (symbol.startswith("<") and symbol.endswith(">")):
